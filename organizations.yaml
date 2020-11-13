@@ -1,0 +1,21 @@
+organizations:
+- sso_url: <sso1 url>
+  accounts:
+  - role_arn: <role1 arn>
+    saml_arn: <identity provider1 saml arn>
+    aws_profile: <profile1 name>
+    aws_region: <region>
+  - role_arn: <role2 arn>
+    saml_arn: <identity provider2 saml arn>
+    aws_profile: <profile2 name>
+    aws_region: <region>
+- sso_url: <sso2 url>
+  accounts:
+  - role_arn: <role1 arn>
+    saml_arn: <identity provider1 saml arn>
+    aws_profile: <profile1 name>
+    aws_region: <region>
+  - role_arn: <role2 arn>
+    saml_arn: <identity provider2 saml arn>
+    aws_profile: <profile2 name>
+    aws_region: <region>
