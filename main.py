@@ -5,7 +5,6 @@ import boto3
 import os
 from shutil import which
 import yaml
-import getpass
 from sys import platform
 
 
