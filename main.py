@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.support.ui import Select # for <SELECT> HTML form
 import time
 from bs4 import BeautifulSoup
 import boto3
@@ -104,23 +103,26 @@ def install_driver(browser):
     return browser
 
 
-def configure_profiles(user, pwd, url, accounts, browser):
+def configure_profiles(url, accounts, browser):
 
     browser.get(url)
 
-    time.sleep(8)
-
-    browser.find_element_by_id('username').send_keys(user)
-    browser.find_element_by_id('password').send_keys(pwd)
-    browser.find_element_by_xpath('/html/body/div[2]/div[2]/div[2]/form/div[6]/a').click()
-
-    time.sleep(15)
-
+    time.sleep(5)
     html_response = browser.page_source
 
-    soup = BeautifulSoup(html_response, 'html.parser')
+    saml_response = ""
 
-    saml_response = soup.find('input', {'name': 'SAMLResponse'}).get('value')
+    while saml_response == "":
+        time.sleep(5)
+
+
+        try:
+            soup = BeautifulSoup(html_response, 'html.parser')
+            saml_response = soup.find('input', {'name': 'SAMLResponse'}).get('value')
+
+        except:
+            html_response = browser.page_source
+            
 
     browser.close()
 
@@ -169,15 +171,8 @@ for organization in organizations['organizations']:
 
     url = organization['sso_url']
 
-    user = input('\n' + "please input your sso user for " + url + '\n' + '\n')
-
-    pwd = getpass.getpass('\n' + "please input your sso password" + '\n' + '\n')
-
     browser = check_browser(use_browser)
 
     accounts = organization['accounts']
 
-    configure_profiles(user, pwd, url, accounts, browser)
-
-
-
+    configure_profiles(url, accounts, browser)
