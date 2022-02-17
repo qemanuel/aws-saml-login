@@ -134,11 +134,16 @@ def configure_profiles(url, accounts, browser):
         profile = account['aws_profile']
         region = account['aws_region']
 
-        response = sts.assume_role_with_saml(
-            RoleArn=role,
-            PrincipalArn=principal,
-            SAMLAssertion=saml_response
-        )
+        try:
+            response = sts.assume_role_with_saml(
+                RoleArn=role,
+                PrincipalArn=principal,
+                SAMLAssertion=saml_response
+            )
+        except:
+            print('\n' + " Something were wrong with account " + account['aws_profile'] + '\n')
+            continue
+
 
         access_key_id = response['Credentials']['AccessKeyId']
         secret_access_key = response['Credentials']['SecretAccessKey']
@@ -156,15 +161,17 @@ def configure_profiles(url, accounts, browser):
         cmd="aws configure set region " + region + " --profile " + profile
         os.system(cmd)
 
+
 use_browser=""
 
 while use_browser != "chrome" and use_browser != "firefox":
     use_browser = input('\n' + "What browser are you going to use? type \"chrome\" or \"firefox\"" + '\n' + '\n')
 
 
+
 organizations = open('organizations.yaml').read()
 
-organizations = yaml.load(organizations)
+organizations = yaml.safe_load(organizations)
 
 for organization in organizations['organizations']:
 
