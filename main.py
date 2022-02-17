@@ -164,7 +164,7 @@ while use_browser != "chrome" and use_browser != "firefox":
 
 organizations = open('organizations.yaml').read()
 
-organizations = yaml.load(organizations)
+organizations = yaml.safe_load(organizations)
 
 for organization in organizations['organizations']:
 
